@@ -99,8 +99,8 @@
           <div class="text-lg font-bold text-slate-800 mt-0.5">4 Tipe</div>
         </div>
         <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-3 text-center">
-          <div class="text-xs text-slate-500 font-medium">KKM Kelulusan</div>
-          <div class="text-lg font-bold text-emerald-700 mt-0.5">75</div>
+          <div class="text-xs text-slate-500 font-medium">KKTP Kelulusan</div>
+          <div class="text-lg font-bold text-emerald-700 mt-0.5">77</div>
         </div>
       </div>
 
@@ -994,6 +994,7 @@
 
     // ==================== STATE MANAGEMENT ====================
     const EXAM_DURATION_SECONDS = 90 * 60; // 90 Menit
+    const KKTP_SCORE = 77; // Kriteria Ketercapaian Tujuan Pembelajaran (KKTP)
 
     const state = {
       student: { nama: '', kelas: '', absen: '' },
@@ -1623,11 +1624,11 @@
       });
 
       const finalScore = Math.round(totalEarned * 10) / 10; // e.g., 87.3 or 92
-      const isPassed = finalScore >= 75;
+      const isPassed = finalScore >= KKTP_SCORE;
       let predicate = 'D';
       if (finalScore >= 90) predicate = 'A';
       else if (finalScore >= 80) predicate = 'B';
-      else if (finalScore >= 70) predicate = 'C';
+      else if (finalScore >= KKTP_SCORE) predicate = 'C';
 
       const elapsedSec = Math.max(1, EXAM_DURATION_SECONDS - Math.max(0, state.secondsLeft));
       const elapsedMin = Math.floor(elapsedSec / 60);
@@ -1648,10 +1649,10 @@
       document.getElementById('res-final-score').textContent = Number.isInteger(finalScore) ? finalScore : finalScore.toFixed(1);
       const statusBadge = document.getElementById('res-status-badge');
       if (isPassed) {
-        statusBadge.textContent = 'TUNTAS (KKM ≥ 75)';
+        statusBadge.textContent = `TUNTAS (KKTP ≥ ${KKTP_SCORE})`;
         statusBadge.className = 'mt-2 inline-block px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30';
       } else {
-        statusBadge.textContent = 'REMEDIAL (KKM < 75)';
+        statusBadge.textContent = `REMEDIAL (KKTP < ${KKTP_SCORE})`;
         statusBadge.className = 'mt-2 inline-block px-3 py-1 rounded-full text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-400/30';
       }
 
@@ -1685,7 +1686,7 @@
         `HASIL SIMULASI UJIAN INFORMATIKA KELAS IX MTs\n` +
         `Nama: ${state.student.nama}\n` +
         `Kelas: ${state.student.kelas}${state.student.absen ? ` (Absen ${state.student.absen})` : ''}\n` +
-        `Nilai Akhir: ${finalScore} / 100 (Predikat ${predicate} - ${isPassed ? 'TUNTAS' : 'REMEDIAL'})\n` +
+        `Nilai Akhir: ${finalScore} / 100 (Predikat ${predicate} - ${isPassed ? 'TUNTAS' : 'REMEDIAL'}, KKTP ${KKTP_SCORE})\n` +
         `Benar Sempurna: ${perfectCount} / 50 Soal\n` +
         `Bab 1: ${Math.round((bab1Earned / bab1Max) * 100)}% | Bab 2: ${Math.round((bab2Earned / bab2Max) * 100)}%\n` +
         `Waktu: ${elapsedMin}m ${elapsedRemSec}d`;
